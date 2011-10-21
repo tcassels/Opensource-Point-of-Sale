@@ -84,6 +84,34 @@ class Item extends Model
 		}
 	}
 
+	function get_info_bc($item_id)
+	{
+		$this->db->from('items');
+		$this->db->where('item_number',$item_id);
+		
+		$query = $this->db->get();
+
+		if($query->num_rows()==1)
+		{
+			return $query->row();
+		}
+		else
+		{
+			//Get empty base parent object, as $item_id is NOT an item
+			$item_obj=new stdClass();
+
+			//Get all the fields from items table
+			$fields = $this->db->list_fields('items');
+
+			foreach ($fields as $field)
+			{
+				$item_obj->$field='';
+			}
+
+			return $item_obj;
+		}
+	}
+
 	/*
 	Get an item id given an item number
 	*/
